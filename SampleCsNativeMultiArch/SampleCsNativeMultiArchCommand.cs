@@ -1,9 +1,7 @@
 ﻿using System;
 using Rhino;
 using Rhino.Commands;
-using Rhino.Geometry;
-using Rhino.Input;
-using Rhino.Input.Custom;
+using System.Runtime.InteropServices;
 
 namespace SampleCsNativeMultiArch
 {
@@ -16,6 +14,9 @@ namespace SampleCsNativeMultiArch
 
     protected override Result RunCommand(Rhino.RhinoDoc doc, RunMode mode)
     {
+      string rhino_arch = IntPtr.Size == 8 ? "64" : "32";
+      RhinoApp.WriteLine("This plug-in is running in {0}-bit Rhino", rhino_arch);
+
       IntPtr version;
       try
       {
@@ -28,7 +29,7 @@ namespace SampleCsNativeMultiArch
         return Result.Failure;
       }
 
-      RhinoApp.WriteLine("Successfully loaded libcurl, version: " + version.ToString());
+      RhinoApp.WriteLine("Successfully loaded libcurl, version: " + Marshal.PtrToStringAnsi(version));
       return Result.Success;
     }
   }

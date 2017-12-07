@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -21,8 +21,8 @@
       <CustomCommands>
         <Command>
           <type>AfterBuild</type>
-          <command>cp -r libs/win64 libs/win32 ${TargetDir}/</command>
-          <workingdir>${SolutionDir}</workingdir>
+          <command>cp -r native_libs/win64 native_libs/win32 ${TargetDir}/</command>
+          <workingdir>${ProjectDir}</workingdir>
         </Command>
         <Command>
           <type>AfterClean</type>
@@ -57,4 +57,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\RhinoCommon.5.12.50810.13095\build\net35\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.5.12.50810.13095\build\net35\RhinoCommon.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">copy "$(TargetPath)" "$(TargetDir)$(ProjectName).rhp"
+erase "$(TargetPath)
+xcopy $(ProjectDir)native_libs\* $(TargetDir) /e /y /i /r</PostBuildEvent>
+  </PropertyGroup>
 </Project>
